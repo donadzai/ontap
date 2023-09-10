@@ -17,35 +17,21 @@ const courses = [
 ];
 
 function App() {
-    const [checked, setChecked] = useState([]);
+    const [checked, setChecked] = useState(2);
 
     const handleChange = (id) => {
-        const isCheck = checked.includes(id);
-
-        if (isCheck) {
-            const newChecked = checked.filter((item) => {
-                return item !== id;
-            });
-            setChecked(newChecked);
-        } else {
-            setChecked((prev) => [...prev, id]);
-        }
+        setChecked(id);
     };
 
     return (
         <div>
             {courses.map((course) => {
                 return (
-                    <Checked
-                        key={course.id}
-                        data={course}
-                        checked={checked.includes(course.id)}
-                        onChange={() => handleChange(course.id)}
-                    />
+                    <Checked data={course} onChange={() => handleChange(course.id)} checked={checked === course.id} />
                 );
             })}
 
-            <button onClick={() => console.log(checked)}>Submit</button>
+            <button onClick={() => alert(courses[checked - 1].name)}>Submit</button>
         </div>
     );
 }
