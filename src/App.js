@@ -1,37 +1,46 @@
-import { useState } from 'react';
-import Checked from './components/Checked';
-
-const courses = [
-    {
-        id: 1,
-        name: 'Javascript',
-    },
-    {
-        id: 2,
-        name: 'HTML',
-    },
-    {
-        id: 3,
-        name: 'CSS',
-    },
-];
+import { useRef, useState } from 'react';
 
 function App() {
-    const [checked, setChecked] = useState(2);
+    const dataJobs = JSON.parse(localStorage.getItem('jobs'));
 
-    const handleChange = (id) => {
-        setChecked(id);
+    const [jobs, setJobs] = useState(dataJobs || []);
+
+    const inputRef = useRef();
+
+    const [inputValue, setInputValue] = useState('');
+
+    const handleAddJob = () => {
+        setJobs((prev) => {
+            const newJobs = [...prev, inputValue];
+
+            if (jobs.includes(inputValue)) {
+                alert('Công việc đã tồn tại');
+                return prev;
+            } else {
+                localStorage.setItem('jobs', JSON.stringify(newJobs));
+
+                return newJobs;
+            }
+        });
+
+        setInputValue('');
+
+        inputRef.current.focus();
     };
 
     return (
         <div>
-            {courses.map((course) => {
-                return (
-                    <Checked data={course} onChange={() => handleChange(course.id)} checked={checked === course.id} />
-                );
+            <input
+                ref={inputRef}
+                value={inputValue}
+                onChange={(e) => {
+                    setInputValue(e.target.value);
+                }}
+            />
+            <button onClick={handleAddJob}>Add</button>
+            {jobs.map((job, index) => {
+                return <li key={index}>{job}</li>;
             })}
-
-            <button onClick={() => alert(courses[checked - 1].name)}>Submit</button>
         </div>
     );
 }
