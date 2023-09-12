@@ -11,11 +11,28 @@ function App() {
 
     const [content, setContent] = useState('');
 
+    const [show, setShow] = useState(false);
+
+    const handleGoToTop = () => window.scrollTo(0, 0);
+
     useEffect(() => {
         fetch(`https://jsonplaceholder.typicode.com/${type}`)
             .then((res) => res.json())
             .then((data) => setContent(data));
     }, [type]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            console.log(window.scrollY);
+            setShow(window.scrollY > 200);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
@@ -33,6 +50,8 @@ function App() {
                 content.map((item) => {
                     return <li key={item.id}>{item.title || item.name}</li>;
                 })}
+
+            {show && <button onClick={handleGoToTop} style={{ position: 'fixed', bottom: 20, right: 20 }}>GO TO TOP</button>}
         </div>
     );
 }
