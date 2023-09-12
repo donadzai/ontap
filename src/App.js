@@ -1,46 +1,38 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import classNames from 'classnames/bind';
+import styles from './App.module.scss';
+
+const cx = classNames.bind(styles);
+
+const tabs = ['posts', 'comments', 'albums'];
 
 function App() {
-    const dataJobs = JSON.parse(localStorage.getItem('jobs'));
+    const [type, setType] = useState('posts');
 
-    const [jobs, setJobs] = useState(dataJobs || []);
+    const [content, setContent] = useState('');
 
-    const inputRef = useRef();
-
-    const [inputValue, setInputValue] = useState('');
-
-    const handleAddJob = () => {
-        setJobs((prev) => {
-            const newJobs = [...prev, inputValue];
-
-            if (jobs.includes(inputValue)) {
-                alert('Công việc đã tồn tại');
-                return prev;
-            } else {
-                localStorage.setItem('jobs', JSON.stringify(newJobs));
-
-                return newJobs;
-            }
-        });
-
-        setInputValue('');
-
-        inputRef.current.focus();
-    };
+    useEffect(() => {
+        fetch(`https://jsonplaceholder.typicode.com/${type}`)
+            .then((res) => res.json())
+            .then((data) => setContent(data));
+    }, [type]);
 
     return (
-        <div>
-            <input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => {
-                    setInputValue(e.target.value);
-                }}
-            />
-            <button onClick={handleAddJob}>Add</button>
-            {jobs.map((job, index) => {
-                return <li key={index}>{job}</li>;
-            })}
+        <div className={cx('wrapper')}>
+            {tabs.map((tab) => (
+                <button
+                    onClick={() => setType(tab)}
+                    style={tab === type ? { color: '#fff', backgroundColor: '#000' } : {}}
+                    key={tab}
+                >
+                    {tab}
+                </button>
+            ))}
+
+            {content &&
+                content.map((item) => {
+                    return <li key={item.id}>{item.title || item.name}</li>;
+                })}
         </div>
     );
 }
