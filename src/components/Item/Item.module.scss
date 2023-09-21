@@ -1,0 +1,32 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    
+    & + .wrapper {
+        margin-top: 10px;
+    }
+}
+
+.info {
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.name-song {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.name-singer {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1.4rem;
+    color: rgba(22, 24, 35, 1);
+}
