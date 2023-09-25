@@ -5,7 +5,7 @@ import Image from '~/components/Image';
 
 const cx = classNames.bind(styles);
 
-function Item() {
+function Item({data}) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('avatar')}>
@@ -15,8 +15,8 @@ function Item() {
             </div>
 
             <div className={cx('info')}>
-                <div className={cx('name-song')}>Rewrite the starts</div>
-                <div className={cx('name-singer')}>Anne-Marie và James Arthur</div>
+                <div className={cx('name-song')}>{data.song}</div>
+                <div className={cx('name-singer')}>{data.singer}</div>
             </div>
         </div>
     );
